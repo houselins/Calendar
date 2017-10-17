@@ -5,13 +5,18 @@
  */
 package labcalendar;
 
+import static labcalendar.Reservar.model;
+
 /**
  *
  * @author house
  */
 
 public class Ingreso extends javax.swing.JFrame {
-
+    static Usuario usuarioActual=null;
+    void abrir(boolean s){
+        this.setVisible(s);
+    }
     /**
      * Creates new form Ingreso
      */
@@ -91,14 +96,17 @@ public class Ingreso extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         if (nicktxt.getText().equals(admin.nick) && contraseñatxt.getText().equals(admin.contraseña)) {
+            usuarioActual=admin;
             new Reservar().setVisible(true);
+            
         }
+        Reservar.salasList.setModel(model);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1KeyPressed
-
+  
     /**
      * @param args the command line arguments
      */
