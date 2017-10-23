@@ -44,7 +44,6 @@ public class Reservar extends javax.swing.JFrame {
 
         jButton1 = new javax.swing.JButton();
         disponible = new javax.swing.JLabel();
-        calendario = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         salasList = new javax.swing.JList<>();
         jPanel1 = new javax.swing.JPanel();
@@ -56,6 +55,7 @@ public class Reservar extends javax.swing.JFrame {
         mmf = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        calendario = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,9 +107,9 @@ public class Reservar extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(63, 63, 63)
-                .addComponent(calendario, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(118, 118, 118)
+                .addComponent(calendario, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(hhf, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
                     .addComponent(hh))
@@ -150,18 +150,18 @@ public class Reservar extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(78, 78, 78)
-                        .addComponent(calendario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(100, 100, 100)
                         .addComponent(disponible, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jButton3)
                         .addGap(34, 34, 34)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(hh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(mm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel1)
+                                .addComponent(hh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(mm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(calendario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
@@ -186,8 +186,9 @@ public class Reservar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        model.clear();
         String[] options = new String[] {"Magistral K", "Bloque G", "Auditorio", "Cancel"};
-    int response = JOptionPane.showOptionDialog(null, "Elija una sala", "Eleccion de sala",
+        int response = JOptionPane.showOptionDialog(null, "Elija una sala", "Eleccion de sala",
         JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
         null, options, options[0]);
         
@@ -199,23 +200,26 @@ public class Reservar extends javax.swing.JFrame {
             K.fechas.add(fecha);
             Reserva r = new Reserva(K,fecha);
             usuarioActual.reservas.add(r);
+            System.out.println(fecha);
         }else{if(response==0)
             disponible.setText("No disponible");}
         if (G.estaDisponible(fecha)&&response==1) {
             disponible.setText("Disponible");
             G.fechas.add(fecha);
             Reserva r = new Reserva(G,fecha);
+            usuarioActual.reservas.add(r);
         }else{if(response==1)
             disponible.setText("No disponible");}
         if (A.estaDisponible(fecha)&&response==2) {
             disponible.setText("Disponible");
             A.fechas.add(fecha);
             Reserva r = new Reserva(A,fecha);
+            usuarioActual.reservas.add(r);
         }else{if(response==2){
             disponible.setText("No disponible");}
         }
-            for(Reserva a:usuarioActual.reservas){
-                model.addElement(a.sala.nombre+" "+a.fecha);
+        for(Reserva a:usuarioActual.reservas){
+            model.addElement(a.sala.nombre+" "+a.fecha);
         }
         salasList.setModel(model);
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -230,24 +234,30 @@ public class Reservar extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        String p=salasList.getSelectedValue().substring(2,26);
+        String p;
         for(Reserva r:usuarioActual.reservas){
-            if (r.fecha.equals(salasList.getSelectedValue().substring(2,26))) {
+            p=r.sala.nombre+" "+r.fecha;
+            System.out.println(p);
+            if (p.equals(salasList.getSelectedValue())) {
+                System.out.println(" si0");
                 usuarioActual.reservas.remove(r);
                 model.removeElementAt(salasList.getSelectedIndex());
                 if (r.sala==K) {
+                    System.out.println("si 1");
                     if(!K.fechas.isEmpty()){
-                    for(String a:K.fechas){
-                        
-                        if (a.equals(salasList.getSelectedValue().substring(2,26))){
-                            K.fechas.remove(a);
+                        for(String a:K.fechas){
+
+                            if (a.equals(salasList.getSelectedValue().substring(2,25))){
+                                K.fechas.remove(a);
+                                System.out.println("si 2");
+                            }
                         }
                     }
-                }}
+                }
                 if(!A.fechas.isEmpty()){
                 if (r.sala==A) {
                     for(String a:K.fechas){
-                        if (a.equals(salasList.getSelectedValue().substring(2,26))){
+                        if (a.equals(salasList.getSelectedValue().substring(2,25))){
                             A.fechas.remove(a);
                         }
                     }
@@ -255,7 +265,7 @@ public class Reservar extends javax.swing.JFrame {
                 if(!G.fechas.isEmpty()){
                 if (r.sala==G) {
                     for(String a:K.fechas){
-                        if (a.equals(salasList.getSelectedValue().substring(2,26))){
+                        if (a.equals(salasList.getSelectedValue().substring(2,25))){
                             G.fechas.remove(a);
                         }
                     }
@@ -264,6 +274,7 @@ public class Reservar extends javax.swing.JFrame {
         }
         
         salasList.setModel(model);
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
